@@ -1,14 +1,14 @@
-var User = require('../models/user.js');
+//var Media = require('../models/media.js');
 
 module.exports = function(router) {
-    router.route('/users')
+    router.route('/media')
     .get(function(req, res) {
         res.json({
             meta: {
 
             },
             data: {
-                users: [{
+                media: [{
                     name: 'Brandon Jernigan',
                     email: 'brandon@whatisboom.com'
                 }]
@@ -21,7 +21,7 @@ module.exports = function(router) {
 
             },
             data: {
-                users: [{
+                media: [{
                     name: 'Brandon Jernigan',
                     email: 'brandon@piqora.com'
                 }]
