@@ -1,8 +1,9 @@
 var User = require('../models/user.js');
 var extend = require('extend');
+var Utils = require('../modules/Utils.js');
 module.exports = function(router) {
     router.route('/users')
-    .get(function(req, res) {
+    .get(Utils.isLoggedIn, function(req, res) {
         User.find(function(err, users) {
             if (err) {
                 res.status(500);
@@ -17,7 +18,7 @@ module.exports = function(router) {
             })
         });
     })
-    .post(function(req, res) {
+    .post(Utils.isLoggedIn, function(req, res) {
 
         var user = new User();
         extend(user, req.body);
