@@ -1,11 +1,12 @@
 var User = require('../models/user.js');
 var jwt = require('jwt-simple');
 var moment = require('moment');
+var Utils = require('../modules/Utils.js');
 
 module.exports = function(router, passport) {
     router.route('/signup')
     .post(function(req, res) {
-        //create user
+        //create user1
     });
 
     router.route('/login')
