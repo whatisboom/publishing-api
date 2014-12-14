@@ -10,16 +10,6 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8889;
 
-var router = express.Router();
-
-router.get('/', function(req, res) {
-    res.json({
-        meta: {
-            message: "Working!"
-        }
-    })
-});
-
-app.use('/api', router);
+require('./app/routes/UserRoutes.js')(app);
 
 app.listen(port);
