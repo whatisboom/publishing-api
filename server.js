@@ -6,6 +6,11 @@ var mongoose = require('mongoose');
 var config = require('./app/config');
 mongoose.connect(config.database);
 
+app.set('jwtTokenSecret', config.jwtTokenSecret);
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 8889;
