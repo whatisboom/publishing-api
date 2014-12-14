@@ -20,8 +20,7 @@ module.exports = function(router) {
     .post(function(req, res) {
 
         var user = new User();
-        user.name = req.body.name;
-        user.email = req.body.email;
+        extend(user, req.body);
         user.save(function(err) {
             if (err) { 
                 res.status(500);
@@ -62,7 +61,7 @@ module.exports = function(router) {
     .put(function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
             if (err) {
-                res.status(500)
+                res.status(500);
             }
 
             extend(user, req.body);
