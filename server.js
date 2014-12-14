@@ -25,14 +25,14 @@ router.use(function(req, res, next) {
     next();
 });
 
-app.use(session({
+/*app.use(session({
     secret: configAuth.sessionSecret,
     saveUninitialized: true,
     resave: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+*/
 require('./app/routes/LoginRoutes.js')(router);
 require('./app/routes/UserRoutes.js')(router, passport);
 require('./app/routes/MediaRoutes.js')(router, passport);

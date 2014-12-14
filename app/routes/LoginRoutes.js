@@ -10,6 +10,9 @@ module.exports = function(router, passport) {
     });
 
     router.route('/login')
+    .get(function(req, res) {
+        res.json({});
+    })
     .post(function(req, res) {
 
         /*User.findOne({ email: req.body.email }, function(err, user) {
