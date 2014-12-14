@@ -18,8 +18,9 @@ var port = process.env.PORT || 8889;
 router.use(function(req, res, next) {
     console.log("[%s] %s", req.method, req.url)
     next();
-})
+});
 
+//router = require('./app/routes/LoginRoutes.js')(router);
 router = require('./app/routes/UserRoutes.js')(router);
 router = require('./app/routes/MediaRoutes.js')(router);
 
