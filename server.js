@@ -1,9 +1,12 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var router = express.Router()
+var router = express.Router();
+var passport = require('passport');
+var session = require('express-session');
 var mongoose = require('mongoose');
-var config = require('./app/config');
+var configDB = require('./app/config/database.js');
+var configAuth = require('./app/config/auth.js');
 mongoose.connect(config.database);
 
 app.set('jwtTokenSecret', config.jwtTokenSecret);
@@ -20,9 +23,9 @@ router.use(function(req, res, next) {
     next();
 });
 
-//router = require('./app/routes/LoginRoutes.js')(router);
-router = require('./app/routes/UserRoutes.js')(router);
-router = require('./app/routes/MediaRoutes.js')(router);
+//require('./app/routes/LoginRoutes.js')(router);
+require('./app/routes/UserRoutes.js')(router);
+require('./app/routes/MediaRoutes.js')(router);
 
 app.use('/', router);
 
