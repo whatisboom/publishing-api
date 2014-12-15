@@ -1,9 +1,52 @@
 var User = require('../models/user.js');
-var extend = require('extend');
+var authConfig = require('../config/auth.js');
+var jwt = require('jwt-simple');
+var moment = require('moment');
 var Utils = require('../modules/Utils.js');
-module.exports = function(router) {
+var extend = require('extend');
+
+module.exports = function(router, passport) {
+
+    router.route('/signup')
+    .get(function(req, res) {
+        res.json({});
+    })
+    .post(function(req, res) {
+        //create user1
+    });
+
+    router.route('/login')
+    .get(function(req, res) {
+        res.json({});
+    })
+    .post(function(req, res, next) {
+
+
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { return next(err); }
+            if (!user) {
+                return res.status(401).json( 
+                    { 
+                        meta: {
+                            error: 'User not found.'
+                        }
+                    }
+                );
+            }
+
+            var token = jwt.encode({email: user.email}, authConfig.jwtTokenSecret);
+            console.log(token);
+            res.json({
+                meta: {
+                    token: token
+                }
+            });
+        })(req, res, next);
+        
+    });
+
     router.route('/users')
-    .get(Utils.isLoggedIn, function(req, res) {
+    .get(function(req, res) {
         User.find(function(err, users) {
             if (err) {
                 res.status(500);
@@ -18,30 +61,41 @@ module.exports = function(router) {
             })
         });
     })
-    .post(Utils.isLoggedIn, function(req, res) {
+    .post(passport.authenticate('local-signup', {
+        session: false,
+        successRedirect: '/dashboard',
+        failureRedirect: '/signup'
+    }))
+    /*.post(function(req, res) {
 
-        var user = new User();
-        extend(user, req.body);
-        user.save(function(err) {
-            if (err) { 
-                res.status(500);
+        User.findOne({ 'email': req.body.email }, function(err, user) {
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            if (user) {
+                return res.status(400).json({
+                    error: 'That email is already registered.'
+                });
             }
             else {
-                res.status(201);
+                var user = new User();
+                extend(user, req.body);
+                user.password = Utils.generateHash(req.body.password);
+
+                user.save(function(err) {
+                    if (err) {
+                        throw err;
+                    }
+                    return res.status(201).json({
+                        data: {
+                            users: [user]
+                        }
+                    });
+                });
             }
-            res.json({
-                meta: {
-                    error: err
-                },
-                data: {
-                    users: [{
-                        name: user.name,
-                        email: user.email
-                    }]
-                }
-            })
         });
-    });
+    });*/
 
     router.route('/users/:user_id')
     .get(function(req, res) {

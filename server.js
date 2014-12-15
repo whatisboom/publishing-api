@@ -11,7 +11,7 @@ var port = process.env.PORT || 8889;
 
 mongoose.connect(configDB.database);
 
-//require('./config/passport.js')(passport);
+require('./app/config/passport.js')(passport);
 
 app.set('jwtTokenSecret', configAuth.jwtTokenSecret);
 
@@ -25,15 +25,9 @@ router.use(function(req, res, next) {
     next();
 });
 
-/*app.use(session({
-    secret: configAuth.sessionSecret,
-    saveUninitialized: true,
-    resave: true
-}));
 app.use(passport.initialize());
-app.use(passport.session());
-*/
-require('./app/routes/LoginRoutes.js')(router);
+
+require('./app/routes/LoginRoutes.js')(router, passport);
 require('./app/routes/UserRoutes.js')(router, passport);
 require('./app/routes/MediaRoutes.js')(router, passport);
 

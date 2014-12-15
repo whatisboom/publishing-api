@@ -1,8 +1,41 @@
-var LocalStrategy = require('passport-local');
+var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user.js');
 module.exports = function(passport) {
-    passport.use(new LocalStrategy(function(username, password, done){
-        User.findOne({ username: username }, function(err, user) {
+    passport.use('local-signup', new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true
+    },
+    function(req, email, password, done) {
+        process.nextTick(function() {
+            User.findOne({ 'email': email }, function(err, user) {
+                if (err) {
+                    return done(err);
+                }
+
+                if (user) {
+                    return done(null, false, {
+                        error: 'That email is already registered.'
+                    });
+                }
+                else {
+                    var user = new User();
+                    user.email = email;
+                    user.password = user.generateHash(password);
+
+                    user.save(function(err) {
+                        if (err) {
+                            throw err;
+                        }
+                        return done(null, user);
+                    });
+                }
+            })
+        });
+    }));
+    passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, password, done) {
+        console.log(email, password);
+        User.findOne({ email: email }, function(err, user) {
             if (err) { 
                 return done(err);
             }
