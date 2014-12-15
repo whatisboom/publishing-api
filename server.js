@@ -5,6 +5,7 @@ var router = express.Router();
 var passport = require('passport');
 var session = require('express-session');
 var mongoose = require('mongoose');
+var morgan = require('morgan');
 var configDB = require('./app/config/database.js');
 var configAuth = require('./app/config/auth.js');
 var Utils = require('./app/modules/Utils.js');
@@ -22,10 +23,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 router.use(Utils.isLoggedIn);
-router.use(function(req, res, next) {
-    console.log("[%s] %s", req.method, req.url)
-    next();
-});
+router.use(morgan('[:method] :url :status :response-time ms'));
 
 app.use(passport.initialize());
 
