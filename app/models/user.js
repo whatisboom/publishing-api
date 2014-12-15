@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
     email: String,
     name: String,
-    password: String
+    password: { type: String, select: false }
 });
 
 UserSchema.methods.generateHash = function(password) {

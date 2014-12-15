@@ -7,6 +7,7 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var configDB = require('./app/config/database.js');
 var configAuth = require('./app/config/auth.js');
+var Utils = require('./app/modules/Utils.js');
 var port = process.env.PORT || 8889;
 
 mongoose.connect(configDB.database);
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+router.use(Utils.isLoggedIn);
 router.use(function(req, res, next) {
     console.log("[%s] %s", req.method, req.url)
     next();
@@ -27,7 +29,6 @@ router.use(function(req, res, next) {
 
 app.use(passport.initialize());
 
-require('./app/routes/LoginRoutes.js')(router, passport);
 require('./app/routes/UserRoutes.js')(router, passport);
 require('./app/routes/MediaRoutes.js')(router, passport);
 

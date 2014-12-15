@@ -7,13 +7,15 @@ var extend = require('extend');
 
 module.exports = function(router, passport) {
 
-    router.route('/signup')
+    router.route('/register')
     .get(function(req, res) {
         res.json({});
     })
-    .post(function(req, res) {
-        //create user1
-    });
+    .post(passport.authenticate('local-signup', {
+        session: false,
+        successRedirect: '/dashboard',
+        failureRedirect: '/register'
+    }));;
 
     router.route('/login')
     .get(function(req, res) {
@@ -34,7 +36,10 @@ module.exports = function(router, passport) {
                 );
             }
 
-            var token = jwt.encode({email: user.email}, authConfig.jwtTokenSecret);
+            var token = jwt.encode({
+                exp: moment().add(7, 'days').valueOf(),
+                email: user.email
+            }, authConfig.jwtTokenSecret);
             console.log(token);
             res.json({
                 meta: {
@@ -61,41 +66,6 @@ module.exports = function(router, passport) {
             })
         });
     })
-    .post(passport.authenticate('local-signup', {
-        session: false,
-        successRedirect: '/dashboard',
-        failureRedirect: '/signup'
-    }))
-    /*.post(function(req, res) {
-
-        User.findOne({ 'email': req.body.email }, function(err, user) {
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            if (user) {
-                return res.status(400).json({
-                    error: 'That email is already registered.'
-                });
-            }
-            else {
-                var user = new User();
-                extend(user, req.body);
-                user.password = Utils.generateHash(req.body.password);
-
-                user.save(function(err) {
-                    if (err) {
-                        throw err;
-                    }
-                    return res.status(201).json({
-                        data: {
-                            users: [user]
-                        }
-                    });
-                });
-            }
-        });
-    });*/
 
     router.route('/users/:user_id')
     .get(function(req, res) {

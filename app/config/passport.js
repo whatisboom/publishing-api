@@ -34,8 +34,7 @@ module.exports = function(passport) {
         });
     }));
     passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, password, done) {
-        console.log(email, password);
-        User.findOne({ email: email }, function(err, user) {
+        User.findOne({ email: email }, '+password', function(err, user) {
             if (err) { 
                 return done(err);
             }
