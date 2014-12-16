@@ -3,6 +3,19 @@ var configAuth = require('../config/auth.js');
 var User = require('../models/user.js');
 
 module.exports = {
+    requireRole: function(role) {
+        return function(req, res, next) {
+            if (!req.user) {
+                res.send(401);
+            }
+            else if (req.user.role === role) {
+                next();
+            }
+            else {
+                res.send(403);
+            }
+        };
+    },
     isLoggedIn: function(req, res, next) {
         var clientToken = req.header('authentication')
         if (clientToken) {

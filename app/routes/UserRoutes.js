@@ -51,7 +51,7 @@ module.exports = function(router, passport) {
     });
 
     router.route('/users')
-    .get(function(req, res) {
+    .get(Utils.requireRole('user'), function(req, res) {
         User.find(function(err, users) {
             if (err) {
                 res.status(500);
@@ -83,7 +83,7 @@ module.exports = function(router, passport) {
             })
         });
     })
-    .put(function(req, res) {
+    .put(Utils.requireRole('user'), function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
             if (err) {
                 res.status(500);
@@ -104,8 +104,7 @@ module.exports = function(router, passport) {
             });
         });
     })
-    .delete(function(req, res) {
-        res.status(403);
+    .delete(Utils.requireRole('admin'), function(req, res) {
         res.json({
             meta: {
                 error: 'No.'

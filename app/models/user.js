@@ -6,7 +6,12 @@ var UserSchema = new Schema({
     email: String,
     name: String,
     title: String,
-    password: { type: String, select: false }
+    password: { type: String, select: false },
+    role: { type: String, default: 'user' }
+});
+
+UserSchema.pre('save', function(next) {
+    next();
 });
 
 UserSchema.methods.generateHash = function(password) {
