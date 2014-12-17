@@ -20,6 +20,7 @@ module.exports = {
     restrictToOwn: function() {
         return function(req, res, next) {
             var user = req.user;
+            var url = req.url;
 
             if (!user) {
                 res.sendStatus(401);
@@ -29,8 +30,8 @@ module.exports = {
                 next();
             }
 
-            if (req.url.indexOf('/users') === 0) {
-                var id = req.url.split('/')[1];
+            if (url.indexOf('/users') === 0) {
+                var id = req.params.userId;
                 if (id === user.id) {
                     next();
                 }

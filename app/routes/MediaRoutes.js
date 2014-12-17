@@ -70,15 +70,51 @@ module.exports = function(router) {
 
         };
 
-        Media.collection.insert(results, function(err) {
-            res.status(201).json({
-                meta: {
+        Media.create(results, function(err) {
+            if (err) {
+                res.status(500).json({
+                    meta: {
+                        error: "Error saving image to database."
+                    }
+                })
+            }
+            else {
+                res.status(201).json({
+                    meta: {
 
-                },
-                data: {
-                    media: results
-                }
-            });
+                    },
+                    data: {
+                        media: results
+                    }
+                });
+            }
+        });
+    });
+
+    router.route('/media/:mediaId')
+    .delete(Utils.requireRole('user'), function(req, res) {
+        
+        Media.findById(req.params.mediaId, function(err, media) {
+            if (err) {
+                res.status(500)
+            }
+            if (!media) {
+                res.send(404);
+            }
+            if (req.user._id === media.user) {
+                media.remove(function(err) {
+                    if (err) {
+                        res.send(500);
+                    }
+                    fs.unlinkSync(media.filename, function(err) {
+                        if (err) {
+                            res.send(500);
+                        }
+                        res.send(204);
+                    })   
+                })
+                
+            }
         });
     });
 
