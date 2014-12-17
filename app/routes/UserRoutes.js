@@ -25,6 +25,7 @@ module.exports = function(router, passport) {
 
 
         passport.authenticate('local', function(err, user, info) {
+            console.log(info);
             if (err) { return next(err); }
             if (!user) {
                 return res.status(401).json( 
@@ -83,7 +84,7 @@ module.exports = function(router, passport) {
             })
         });
     })
-    .put(Utils.requireRole('user'), function(req, res) {
+    .put([Utils.restrictToOwn(), Utils.requireRole('user')], function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
             if (err) {
                 res.status(500);

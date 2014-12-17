@@ -12,6 +12,7 @@
     "passport": "^0.2.1",
     "express-session": "^1.9.3",
     "bcrypt-nodejs": "0.0.3",
-    "morgan": "^1.5.0"
+    "morgan": "^1.5.0",
+    "image-size": "^0.3.5"
   }
 }
