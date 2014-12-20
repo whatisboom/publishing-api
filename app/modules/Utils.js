@@ -75,5 +75,26 @@ module.exports = {
                 });
             }
         }
+    },
+    decodeBase64: function(base64string) {
+        var matches = base64string.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+        var res = {};
+
+        if (matches.length !== 3) {
+            return new Error('Invalid input string');
+        }
+        res.type = matches[1];
+        res.data = new Buffer(matches[2], 'base64');
+        return res;
+    },
+    error: function(statusCode, content) {
+        return {
+            meta: {
+                error: {
+                    code: code,
+                    message: content
+                }
+            }
+        };
     }
 };
