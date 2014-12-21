@@ -36,7 +36,7 @@ module.exports = {
 
             };
 
-            Media.create(results, function(err) {
+            Media.create(results, function(err, media) {
                 if (err) {
                     res.status(500).json({
                         meta: {
@@ -50,7 +50,7 @@ module.exports = {
 
                         },
                         data: {
-                            media: results
+                            media: media
                         }
                     });
                 }
