@@ -60,8 +60,6 @@ module.exports = {
     read: function() {
         return function(req, res) {
 
-            console.log(req.user);
-
             Media.find({user: req.user.id}, function(err, media) {
                 if (err) {
                     res.status(500).json({

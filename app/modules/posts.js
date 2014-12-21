@@ -48,7 +48,25 @@ module.exports = {
     },
     read: function() {
         return function(req, res) {
-            res.status(501).json(Utils.error(501, "Not yet implemented."));
+            Post.find({user: req.user.id}, function(err, posts) {
+                if (err) {
+                    res.status(500).json({
+                        meta: {
+                            error: "Fetching posts failed."
+                        }
+                    });
+                }
+
+                res.status(200).json({
+                    meta: {
+
+                    },
+                    data: {
+                        posts: posts
+                    }
+                });
+
+            });
         }
     },
     update: function() {
