@@ -91,7 +91,7 @@ module.exports = {
         return {
             meta: {
                 error: {
-                    code: code,
+                    code: statusCode,
                     message: content
                 }
             }

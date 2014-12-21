@@ -34,7 +34,8 @@ router.use(morgan('[:method] :url :status :response-time ms'));
 app.use(passport.initialize());
 
 require('./app/routes/UserRoutes.js')(router, passport);
-require('./app/routes/MediaRoutes.js')(router, passport);
+require('./app/routes/MediaRoutes.js')(router);
+require('./app/routes/PostRoutes.js')(router);
 
 app.use('/', router);
 
